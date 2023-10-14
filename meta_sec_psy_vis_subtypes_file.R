@@ -9,19 +9,88 @@
 #                                                                                      #
 ########################################################################################
 
-# Function to extract raw proportion and upper and lower CI from meta-analytic objects
-# Outputs vector with name, propotion, upper and lower CI
+
+# extract proportions from meta analysis  ---------------------------------
+
 
 extract_proportions <- function(meta_obj, name){
-  (TE_random_vals <- c(meta_obj$TE.random,
-                       meta_obj$lower.random,
-                       meta_obj$upper.random))
-  vals <- unlist(lapply(TE_random_vals, meta:::backtransf, sm="PFT", n=1/mean(1/meta_obj$n)))
-  append(name, vals)
+  # Extract proportions and other meta-analytic information from the metaprop object
+  #
+  # Arguments:
+  #  meta_obj: metaprop meta-analysis object
+  #  name: name of subtype for labelling
+  #
+
+  # Calculate total cases and total N for studies that report cases (i.e. don't have NA for cases)
+  total_cases <- 0
+  total_n <- 0
+  for (i in 1:length(meta_obj$n)) {
+    if (!is.na(meta_obj$event[i])) {
+      total_cases <- total_cases + meta_obj$event[i]
+      total_n <- total_n + meta_obj$n[i]
+    }
+  }
+    
+  # Extract estimate and 95% CIs
+  TE_random_vals <- c(meta_obj$TE.random,
+                      meta_obj$lower.random,
+                      meta_obj$upper.random)
+  
+  # Backtransform these three values to proportions
+  vals <- unlist(lapply(TE_random_vals, meta:::backtransf, sm = "PFT", n = 1/mean(1/meta_obj$n)))
+
+  # Return, name of subtype proportion (e.g. 'metabolic', total cases, total N,
+  #  k studies included, and backtransformed estimate and upper and lower CI
+  append(name, c(total_cases, total_n, meta_obj$k, vals))
 }
+
+
+# plot with forester ------------------------------------------------------
+
+plot_with_forester <- function(meta_df) {
+  # Plots meta-analytic data into a forest plot produced by forester
+  #
+  # Arguments:
+  #  # meta_df: dataframe with data
+
+  
+  # Sort the dataframe by the largest estimate first - use arrange(desc(prop)) for reverse order
+  meta_df <- meta_df %>%
+    arrange(prop)
+  
+  # Extract column for the left side column needed for forester
+  meta_df_lsd <- meta_df %>%
+    dplyr::select(Type = type, "Total cases" = total_cases, "Total N" = total_n, "k studies" = k)
+  
+  # Create formatted string for estimate and 95% CI e.g. "50.0% (40.1 - 55.2)"
+  meta_df$estimate_str <- sprintf("%.2f%% (%.2f - %.2f)", meta_df$prop*100, meta_df$prop_lower*100, meta_df$prop_higher*100)
+  
+  # Extract columns for the right side column needed for forester
+  meta_df_rsd <- meta_df %>%
+    dplyr::select(Prevalence = estimate_str)
+  
+  #...and plot
+  forester(left_side_data = meta_df_lsd,
+           right_side_data = meta_df_rsd,
+           estimate = meta_df$prop,
+           ci_low = meta_df$prop_lower,
+           ci_high = meta_df$prop_higher,
+           stripe_colour = "#ffffff",
+           estimate_precision = 5,
+           font_family = "sans",
+           point_sizes = 2,
+           xlim = c(0, .2),
+           xbreaks = c(0,.10,.20),
+           display = FALSE,
+           file_path = here::here("output/forester_sec_subtypes.png"))
+}
+
 
 # Create empty dataframe to store results
 summary_df <- data.frame(type=character(),
+                         total_cases = numeric(),
+                         total_n = numeric(),
+                         k = numeric(),
                          prop = numeric(),
                          prop_lower = numeric(),
                          prop_higher = numeric(),
@@ -75,58 +144,18 @@ summary_df[nrow(summary_df)+1,] <- extractpr
 extractpr <- extract_proportions(pes_unknown_sub_sec_psych_summary, "Not Specified/Unknown")
 summary_df[nrow(summary_df)+1,] <- extractpr
 
+extractpr <- extract_proportions(pes_sleep_sec_psych_summary, "Sleep")
+summary_df[nrow(summary_df)+1,] <- extractpr
+
+extractpr <- extract_proportions(pes_head_sec_psych_summary, "Head Injury")
+summary_df[nrow(summary_df)+1,] <- extractpr
+
+
 # Change relevant columns to numeric)
 summary_df$prop <- as.numeric(summary_df$prop)
 summary_df$prop_lower <- as.numeric(summary_df$prop_lower)
 summary_df$prop_higher <- as.numeric(summary_df$prop_higher)
 
-# Visualisation -----------------------------------------------------------
+plot_with_forester(summary_df)
 
-# Global options
-
-options(scipen = 100, digits = 1)
-options(max.print = 500000000)
-
-DV <- c("","","","","","","","","","","","","","","")
-IV <- summary_df$type
-ES <- summary_df$prop
-LCI <- summary_df$prop_lower
-UCI <- summary_df$prop_higher
-
-subtype_ab <- data.frame(DV, IV, ES, LCI, UCI)
-
-if (write_to_file == 1) {
-  png(file=paste('output/', 'forest_sec_psych_subtypes.png', sep=''), width = 10, height = 10, units = 'in', res = 200)
-}
-
-ggplot(data=subtype_ab, aes(x = reorder(IV,-ES), y = ES, ymin = LCI, ymax = UCI)) +
-  geom_pointrange() + 
-  geom_hline(yintercept = 0, lty = 1, size = 1) +  
-  geom_errorbar(aes(ymin = LCI, ymax = UCI), width = 0.5, cex = 1) + 
-  facet_wrap(~DV) +
-  coord_flip() +  
-  geom_point(shape = 15, size = 5) + 
-  ggtitle("") + 
-  xlab("") + 
-  ylab("proportion all psychosis  ") + 
-  scale_y_continuous(limits = c(0,.25), breaks = c(0,.05,.10,.15,.20,.25)) + 
-  theme(line = element_line(colour = "white", size = 3),
-        strip.background = element_rect(fill="white"),
-        legend.position ="none",
-        axis.line.x = element_line(colour = "black"),
-        axis.line.y = element_blank(),
-        panel.border = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.background = element_blank(),
-        axis.ticks = element_blank(),
-        axis.title.x = element_text(colour = "Black", margin = margin(t = 20, r = 0, b = 0, l = 0)),
-        axis.title.y = element_text(colour = "Black", margin = margin(t = 0, r = 20, b = 0, l = 0)),
-        plot.title = element_text(colour = "Black", margin = margin(t = 0, r = 0, b = 20, l = 0)),
-        axis.text = element_text(size=24, color = "Black"),
-        text = element_text(size = 24), plot.margin = margin(t = 2, r = 2, b = 2, l = 2, unit = "cm"))
-
-if (write_to_file == 1) {
-  dev.off()
-}
 

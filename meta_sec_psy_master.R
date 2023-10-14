@@ -5,12 +5,9 @@
 # "How common are secondary causes of psychosis?                                       
 #  A meta-analysis of prevalence"                                                      
 #                                                                                      
-# master script
+# Master script
 #
-# [insert github address] 
-#
-#queries:
-# extract psychosis duration?
+# https://github.com/grahamblackman/prev_secondary_psychosis_meta
 #
 ########################################################################################
 
@@ -21,7 +18,7 @@
 #
 # The following line will clear all objects from memory. Useful for a 'fresh start' when
 # debugging but not necessary for the script to run
- rm(list= ls()) 
+rm(list = ls()) 
 
 # The following line clears all the plots from RStudio if this script is being run inside it
 # Useful for similar 'fresh start' reasons
@@ -33,7 +30,7 @@ dev.off(dev.list()["RStudioGD"])
 write_to_file = 1
 
 # Load packages
-#
+
 library("meta") # for meta analysis
 library("metafor") # for meta analysis
 library("readxl")# for reading excel documents
@@ -45,7 +42,8 @@ library("janitor") # cleaning data
 library("devtools") # to download packages in development
 library("lme4") #linear model 4, required for meta analysis
 library("expss") #Tables, Labels and Some Useful Functions from Spreadsheets (eg excel and SPSS' Statistics)
-library("scales") 
+library("scales") # descriptions 
+library("forester") # visualised multiple meta analytic estimates onto a single forest plot   # Details here: https://github.com/rdboyes/forester
 
 
 # Ensure names map to explicit package functions and are not overwritten
@@ -55,7 +53,7 @@ rma <- metafor::rma
 transf.ipft.hm <- metafor::transf.ipft.hm
 forest <- metafor::forest
 funnel <- metafor::funnel
-count_if<-expss::count_if
+count_if <- expss::count_if
 
 # Load data
 
@@ -64,12 +62,14 @@ datafile_path = paste("psych_data.xlsx")
 data <- read_xlsx(datafile_path, sheet = "data")
 
 # Execute subscripts
-source("meta_sec_psy_pro.R") #
+source("meta_sec_psy_pro.R") 
 source("meta_sec_psy_desc.R", echo = TRUE) 
 source("meta_sec_psy_prev.R", echo = TRUE)  
 source("meta_sec_psy_prev_subtype.R", echo = TRUE) 
+source("meta_sec_psy_prev_investigation.R", echo = TRUE) 
 source("meta_sec_psy_vis_file.R")
-source("meta_sec_psy_vis_subtypes_file.R")  # (GB 2/6/23:does not run automatically for some reason)
+source("meta_sec_psy_vis_subtypes_file.R")  
+source("meta_sec_psy_vis_investigations_file.R")  
 
 # Display R version and package versions
 
@@ -91,5 +91,4 @@ print_package_version("devtools")
 print_package_version("lme4")
 print_package_version("expss")
 print_package_version("scales") 
-
-
+print_package_version("forester") 

@@ -9,9 +9,9 @@
 #                                                                                      #
 ########################################################################################
 
-# to :
+# to do:
+# cog_assess_stan_tool_freq  - uses 'yes' and 'no' rather than 'all' and 'some'
 
-# secondary psychosis considered [change data to all lower case]
 
 # This script calculates descriptive statistics
 #
@@ -27,13 +27,13 @@ sprintf("Total number of number of studies reporting first-episode psychosis onl
 
 # Calculate total number of number of studies reporting non-first-episode psychosis only samples
 tot_study_non_fep_only <- tot_study-tot_study_fep 
-sprintf("Total number of number of studies reporting first-episode psychosis only cohort: %s", tot_study_non_fep_only)
+sprintf("Total number of number of studies reporting on not exclusively first-episode psychosis only samples: %s", tot_study_non_fep_only)
 
 # Calculate earliest and latest publication dates of included studies
-study_year_min <- min(data$year, na.rm=TRUE)
+study_year_min <- min(data$year, na.rm = TRUE)
 sprintf("Earliest publication year of included study: %s", study_year_min)
 
-study_year_max <- max(data$year, na.rm=TRUE)
+study_year_max <- max(data$year, na.rm = TRUE)
 sprintf("Latest publication year of included study: %s", study_year_max)
 
 # Descriptive statistics relating to data reported in studies
@@ -41,90 +41,57 @@ sprintf("Latest publication year of included study: %s", study_year_max)
 # Pooled sample 
 
 # Calculate total number of psychosis patients assessed for secondary psychosis
-tot_sam <- sum(data$tot_sample, na.rm=TRUE)
+tot_sam <- sum(data$tot_sample, na.rm = TRUE)
 sprintf("Pooled sample of psychosis patients assessed for secondary psychosis: %s", tot_sam)
 
 # Calculate total number of psychosis patients assessed for secondary psychosis from FEP samples
-tot_sam_fep <- sum(data_fep$tot_sample, na.rm=TRUE)
+tot_sam_fep <- sum(data_fep$tot_sample, na.rm = TRUE)
 sprintf("Pooled sample (FEP studies only) assessed for secondary psychosis: %s", tot_sam_fep)
 
 # Calculate total number of psychosis patients assessed for secondary psychosis from non-FEP only samples
 tot_sam_non_fep_only <- tot_sam - tot_sam_fep
-sprintf("Pooled sample (non-FEP only studies) assessed for secondary psychosis: %s", tot_sam_fep)
+sprintf("Pooled sample (non-FEP only studies) assessed for secondary psychosis: %s", tot_sam_non_fep_only )
 
 # Calculate minimum and maximum sample size reported across included studies
-sam_size_min <- min(data$tot_sample, na.rm=TRUE)
+sam_size_min <- min(data$tot_sample, na.rm = TRUE)
 sprintf("Minimum sample size reported in included studies: %s", sam_size_min)
 
-sam_size_max <- max(data$tot_sample, na.rm=TRUE)
+sam_size_max <- max(data$tot_sample, na.rm = TRUE)
 sprintf("Maximum sample size reported in included studies: %s", sam_size_max)
-
-
-# age characteristics --------------------------------------------------
-
-# Number of studies with age reported
-tot_study_age <- sum(complete.cases(data$mean_age))
-sprintf("Number of studies with age reported: %s", tot_study_age)
-
-# Minimum and maximum age across studies
-sam_age_min <- min(data$mean_age, na.rm=TRUE)
-sprintf("Minimum age of patient reported in included studies: %s", sam_age_min)
-
-sam_age_max <- max(data$mean_age, na.rm=TRUE)
-sprintf("Maximum age of patient reported in included studies: %s", sam_age_max)
-
-
-# sex characteristics -----------------------------------------------------
-
-# Number of studies with sex reported
-tot_study_sex <- sum(complete.cases(data$gender_female_freq))
-sprintf("Number of studies with sex reported: %s", tot_study_sex)
-
-# Proportion of female participants: min
-prop_fem_min <- min(data$gender_female_freq/data$tot_sample, na.rm=TRUE)
-sprintf("Minimum proportion of female participants across studies: %.2f", prop_fem_min)
-
-# Proportion of female participants: max
-prop_fem_max <- max(data$gender_female_freq/data$tot_sample, na.rm=TRUE)
-sprintf("Maximum proportion of female participants across studies: %.2f", prop_fem_max)
-
-# Proportion of female participants: total
-data_gender_reported <- data %>% 
-  na.omit(data$gender_female_freq)
-tot_prop_fem <- sum(data_gender_reported$gender_female_freq, na.rm=TRUE) / sum(data_gender_reported$tot_sample, na.rm=TRUE)
-sprintf("Proportion of female participants across studies: %.2f", tot_prop_fem)
-
-# Psychosis duration 
-
-# [data not extracted]
 
 # clinical setting -----------------------------------------------------------
 
 # number of studies by clinical setting 
-A_and_E <- count_if("A_and_E", data$setting) 
-sprintf("Studies in A&E or other general hostpial setting: %.0f", A_and_E)
+gen_hos <- count_if("General Hospital", data$setting) 
+sprintf("Studies in general hostpial setting: %.0f", gen_hos)
 
-outpat_psych <- count_if("outpat_psych", data$setting) 
-sprintf("Studies in out patient psychiatric setting: %.0f", outpat_psych)
+outpat_psych <- count_if("Psychiatric Clinic", data$setting) 
+sprintf("Studies in a Psychiatric Clinic setting: %.0f", outpat_psych)
 
-inpat_psych <- count_if("inpat_psych", data$setting) 
-sprintf("Studies in an in patient psychiatric setting: %.0f", inpat_psych)
+inpat_psych <- count_if("Psychiatric Hospital", data$setting) 
+sprintf("Studies in a Psychiatric Hospital setting: %.0f", inpat_psych)
 
 any_psych <- outpat_psych + inpat_psych
-sprintf("Studies in any psych setting: %.0f", any_psych)
+sprintf("Studies in any psychiatric setting: %.0f", any_psych)
 
-mixture <- count_if("mixture", data$setting) 
-sprintf("Studies in a mixture of settings: %.0f", any_psych)
+mixture <- count_if("2 or more settings", data$setting) 
+sprintf("Studies in a mixture of settings: %.0f", mixture)
 
 # number of patients by clinical setting 
-tot_sam_A_and_E <- sum(data_A_and_E$tot_sample, na.rm=TRUE)
-sprintf("Patients in A&E and other general hostpial settings: %.0f", tot_sam_A_and_E)
+tot_sam_gen_hos<- sum(data_gen_hos$tot_sample, na.rm = TRUE)
+sprintf("Pooled sample from studies restricted to A&E and other general hostpial settings: %.0f", tot_sam_gen_hos)
 
-tot_sam_outpat_psych <- sum(data_outpat_psych$tot_sample, na.rm=TRUE)
-sprintf("Patients in out patient psychiatric setting: %.0f", tot_sam_outpat_psych)
+tot_sam_outpat_psych <- sum(data_outpat_psych$tot_sample, na.rm = TRUE)
+sprintf("Pooled sample from studies restricted out patient psychiatric setting: %.0f", tot_sam_outpat_psych)
 
-tot_sam_inpat_psych <- sum(data_inpat_psych$tot_sample, na.rm=TRUE)
-sprintf("Patients in an in patient psychiatric setting: %.0f", tot_sam_inpat_psych)
+tot_sam_inpat_psych <- sum(data_inpat_psych$tot_sample, na.rm = TRUE)
+sprintf("Pooled sample from studies restricted to patient psychiatric setting: %.0f", tot_sam_inpat_psych)
+
+tot_sam_any_psych <- tot_sam_outpat_psych  + tot_sam_inpat_psych
+sprintf("Pooled sample in any psych setting: %.0f", tot_sam_any_psych)
+
+tot_sam_mixture <- sum(data_mixture$tot_sample, na.rm = TRUE)
+sprintf("Pooled sample from studies using mixture of clinical settings t: %.0f", tot_sam_inpat_psych)
 
 # Calculate and show number of studies by continent 
 
@@ -146,15 +113,98 @@ sprintf("Asian studies: %s", asia)
 aus <- count_if("aus", data$continent)
 sprintf("Australsian studies: %s", aus)
 
-# secondary psychosis considered [change to all lower case]---------------------------------------------------
+
+# age characteristics --------------------------------------------------
+
+# Number of studies with age reported
+tot_study_age <- sum(complete.cases(data$mean_age))
+sprintf("Number of studies with age reported: %s", tot_study_age)
+
+# Minimum and maximum age across studies
+sam_age_min <- min(data$mean_age, na.rm = TRUE)
+sprintf("Minimum age of patient reported in included studies: %s", sam_age_min)
+
+sam_age_max <- max(data$mean_age, na.rm = TRUE)
+sprintf("Maximum age of patient reported in included studies: %s", sam_age_max)
+
+# Minimum and maximum age across studies for primary psychosis
+pri_sam_age_min <- min(data$mean_age_pri, na.rm = TRUE)
+sprintf("Minimum age of patient reported in included studies for primary psychosis: %s", pri_sam_age_min)
+
+pri_sam_age_max <- max(data$mean_age_pri, na.rm = TRUE)
+sprintf("Maximum age of patient reported in included studies for primary psychosis: %s", pri_sam_age_max)
+
+# Minimum and maximum age across studies for secondary psychosis
+sec_sam_age_min <- min(data$mean_age_sec, na.rm = TRUE)
+sprintf("Minimum age of patient reported in included studies for secondary psychosis: %s", sec_sam_age_min)
+
+sec_sam_age_max <- max(data$mean_age_sec, na.rm = TRUE)
+sprintf("Maximum age of patient reported in included studies for secondary psychosis: %s", sec_sam_age_max)
+
+# sex characteristics -----------------------------------------------------
+
+# Number of studies with sex reported
+tot_study_sex <- sum(complete.cases(data$gender_female_freq))
+sprintf("Number of studies with sex reported: %s", tot_study_sex)
+
+# Proportion of female participants: min
+prop_fem_min <- min(data$gender_female_freq/data$tot_sample, na.rm = TRUE)
+sprintf("Minimum proportion of female participants across studies: %.2f", prop_fem_min)
+
+# Proportion of female participants: max
+prop_fem_max <- max(data$gender_female_freq/data$tot_sample, na.rm = TRUE)
+sprintf("Maximum proportion of female participants across studies: %.2f", prop_fem_max)
+
+# Proportion of female participants: total
+data_gender_reported <- data %>% 
+  na.omit(data$gender_female_freq)
+tot_prop_fem <- sum(data_gender_reported$gender_female_freq, na.rm = TRUE) / sum(data_gender_reported$tot_sample, na.rm = TRUE)
+sprintf("Proportion of female participants across studies: %.2f", tot_prop_fem)
+
+# study characteristics -----------------------------------------------------
+
+# Number of studies using prospective design
+tot_study_prospect <- count_if("yes", data$design)
+sprintf("Number of prospective studies: %s", tot_study_prospect)
+
+
+# Psychosis duration 
+
+
+DUP_min <- min(data$DUP,na.rm=TRUE)
+sprintf("min DUP across studies: %s", DUP_min)
+
+DUP_max <- max(data$DUP,na.rm=TRUE)
+sprintf("max DUP across studies: %s", DUP_max)
+
+
+
+# secondary psychosis considered ---------------------------------------------------
 
 # Calculate number of studies which assessed multiple causes of psychosis 
-tot_multiple_sec_psych_types <- count_if("Multiple", data$multiple_sec_psych_types)
+tot_multiple_sec_psych_types <- count_if("multiple", data$multiple_sec_psych_types)
 sprintf("Total number of studies that considered mutiple type of psychosis: %s", tot_multiple_sec_psych_types)
 
 # Calculate number of studies which assessed single causes of psychosis 
-tot_single_sec_psych_types <- count_if("Single", data$multiple_sec_psych_types)
+tot_single_sec_psych_types <- count_if("single", data$multiple_sec_psych_types)
 sprintf("Total number of studies that only considered a single type of psychosis (eg drug induced): %s", tot_single_sec_psych_types)
+
+# Calculate number of studies unclear if assessed  single of multiple causes of psychosis 
+tot_single_sec_psych_types <- count_if("NS", data$multiple_sec_psych_types)
+sprintf("Total number of studies where it was unclear if assessed  single of multiple causes of psychosis : %s", tot_single_sec_psych_types)
+
+#  psychosis disorder or symptom considered ---------------------------------------------------
+
+# Calculate number of studies which assessed disorder 
+tot_psych_disorder <- count_if("disorder", data$disorder)
+sprintf("Total number of studies that classified psychotic disorder: %s", tot_psych_disorder)
+
+tot_psych_symptoms <- count_if("symptoms", data$disorder)
+sprintf("Total number of studies that classified psychotic symptoms: %s", tot_psych_symptoms)
+
+# Calculate number of studies unclear if assessed  single of multiple causes of psychosis 
+tot_single_sec_psych_types <- count_if("NS", data$multiple_sec_psych_types)
+sprintf("Total number of studies where it was unclear if assessed  single of multiple causes of psychosis : %s", tot_single_sec_psych_types)
 
 
 # Neuroimaging/neurophysiology: ---------------------------------------------------------
@@ -241,12 +291,13 @@ sprintf("Total number of studies that routinely performed cog_assess on all pati
 tot_cog_assess_subset <- count_if("some", data$cog_assess_freq)
 sprintf("Total number of studies that performed cog_assess on subset of patients: %s", tot_cog_assess_subset)
 
-# ?? Cognitive assessment cog_assess_stan_tool_freq
-tot_cog_assess_stan_tool_all <- count_if("all", data$cog_assess_stan_tool_freq)
+# **relabel** Cognitive assessment cog_assess_stan_tool_freq
+tot_cog_assess_stan_tool_all <- count_if("yes", data$cog_assess_stan_tool_freq)
 sprintf("Total number of studies that routinely performed cog_assess_stan_tool on all patients: %s", tot_cog_assess_stan_tool_all)
 
 tot_cog_assess_stan_tool_subset <- count_if("some", data$cog_assess_stan_tool_freq)
 sprintf("Total number of studies that performed cog_assess_stan_tool on subset of patients: %s", tot_cog_assess_stan_tool_subset)
+
 
 # Other assessment frequency
 tot_other_assess_all <- count_if("all", data$other_assess_freq)

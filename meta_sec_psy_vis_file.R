@@ -29,7 +29,7 @@ options(na.action = "na.omit")
 precision_sec <- sqrt(ies_da_sec_psych$vi)
 
 if (write_to_file == 1) {
-  png(file = paste('output/', 'forest_sec_psych.png', sep=''), width = 10, height = 10, units = 'in', res = 200)
+  png(file = paste('output/', 'forest_sec_psych.png', sep=''), width = 10, height = 10, units = 'in', res = 300)
 }
 
 forest_sec_psych <- forest(pes_sec_psych_summary,
@@ -43,7 +43,7 @@ forest_sec_psych <- forest(pes_sec_psych_summary,
                            weight.study = "fixed", # same size if random used
                            col.square = "black", col.square.lines = "black",
                            col.diamond = "black", col.diamond.lines = "black",
-                           plotwidth = "5cm", colgap = "5mm",fig.height = 0.1, fig.width = 0.1, fig.align = "center",
+                           plotwidth = "10cm", colgap = "5mm",fig.height = 0.1, fig.width = 0.2, fig.align = "center",
                            pooled.totals = FALSE, comb.fixed = FALSE, fs.hetstat = 10,
                            print.tau2 = TRUE, print.Q = TRUE, print.pval.Q = TRUE, print.I2 = TRUE,
                            digits = 1, sortvar = precision_sec)
@@ -53,10 +53,38 @@ if (write_to_file == 1) {
   dev.off() 
 }
 
+# by subgroup: secondary causes considered (single/multiple) --------------------------------------------------------
+
+if (write_to_file == 1) {
+  png(file = paste('output/', 'forest_sec_psych_by_cause.png', sep = ''), width = 7, height = 14, units = 'in', res = 300)
+}
+
+forest_sec_psych_by_cause <- forest(pes_sec_psych_summary_by_multiple,
+                                  xlim = c(0,100),
+                                  pscale = 100,
+                                  rightcols = FALSE,
+                                  leftcols = c("studlab", "event", "n", "effect", "ci"), leftlabs = c("Study", "Cases", "Total", "Prev(%)", "95% C.I."), 
+                                  fontsize = 10,
+                                  xlab = "Any secondary cause(%)", smlab = "",
+                                  fixed = FALSE,
+                                  weight.study = "fixed", #same size if random used
+                                  col.square = "black", col.square.lines = "black",
+                                  col.diamond = "black", col.diamond.lines = "black",
+                                  plotwidth = "5cm", colgap = "5mm",fig.height = 0.1, fig.width = 0.1, fig.align = "center",
+                                  pooled.totals = FALSE, comb.fixed = FALSE, fs.hetstat = 10,
+                                  print.tau2 = TRUE, print.Q = TRUE, print.pval.Q = TRUE, print.I2 = TRUE,
+                                  digits = 1)
+
+forest_sec_psych_by_cause
+
+if (write_to_file == 1) {
+  dev.off() 
+}
+
 # by subgroup: FEP --------------------------------------------------------
 
 if (write_to_file == 1) {
-  png(file = paste('output/', 'forest_sec_psych_by_FEP.png', sep = ''), width = 7, height = 8, units = 'in', res = 300)
+  png(file = paste('output/', 'forest_sec_psych_by_FEP.png', sep = ''), width = 7, height = 14, units = 'in', res = 300)
 }
 
 forest_sec_psych_by_FEP <- forest(pes_sec_psych_summary_by_FEP,
@@ -84,7 +112,7 @@ if (write_to_file == 1) {
 # by subgroup: design --------------------------------------------------------
 
 if (write_to_file == 1) {
-  png(file = paste('output/', 'forest_sec_psych_by_design.png', sep=''), width = 7, height = 6, units = 'in', res = 300)
+  png(file = paste('output/', 'forest_sec_psych_by_design.png', sep=''), width = 7, height = 14, units = 'in', res = 300)
 }
 
 forest_sec_psych_by_design <- forest(pes_sec_psych_summary_by_design,
@@ -112,10 +140,10 @@ if (write_to_file == 1) {
 # by subgroup: setting --------------------------------------------------------
 
 if (write_to_file == 1) {
-  png(file = paste('output/', 'forest_sec_psych_by_setting.png', sep=''), width = 7, height = 10, units = 'in', res = 300)
+  png(file = paste('output/', 'forest_sec_psych_by_setting.png', sep=''), width = 7, height = 14, units = 'in', res = 300)
 }
 
-forest_sec_psych_by_setting <- forest(pes_sec_psych_summary_by_setting,
+forest_sec_psych_by_setting <- forest(pes_sec_psych_summary_by_setting_bin,
                                       xlim = c(0,100),
                                       pscale = 100,
                                       rightcols = FALSE,
@@ -140,7 +168,7 @@ if (write_to_file == 1) {
 # by subgroup: diagnosis --------------------------------------------------------
 
 if (write_to_file == 1) {
-  png(file = paste('output/', 'forest_sec_psych_by_disorder.png', sep=''), width = 7, height = 10, units = 'in', res = 300)
+  png(file = paste('output/', 'forest_sec_psych_by_disorder.png', sep=''), width = 7, height = 14, units = 'in', res = 300)
 }
 
 forest_sec_psych_by_disorder <- forest(pes_sec_psych_summary_by_disorder,
@@ -168,7 +196,7 @@ if (write_to_file == 1) {
 # by subgroup: UDS --------------------------------------------------------
 
 if (write_to_file == 1) {
-  png(file = paste('output/', 'forest_sec_psych_by_UDS.png', sep=''), width = 7, height = 10, units = 'in', res = 300)
+  png(file = paste('output/', 'forest_sec_psych_by_UDS.png', sep=''), width = 7, height = 14, units = 'in', res = 300)
 }  
 
 forest_sec_psych_by_setting <- forest(pes_sec_psych_summary_by_UDS,
@@ -197,7 +225,7 @@ if (write_to_file == 1) {
 
 # Endogenous causes
 if (write_to_file == 1) {
-  png(file = paste('output/', 'forest_endo_sec_psych.png', sep=''), width = 7, height = 6, units = 'in', res = 300)
+  png(file = paste('output/', 'forest_endo_sec_psych.png', sep=''), width = 7, height = 14, units = 'in', res = 300)
 }
 
 forest_endo_sec_psych <- forest(pes_endo_sec_psych_summary,
@@ -222,7 +250,7 @@ if (write_to_file == 1) {
 
 # Exogenous causes
 if (write_to_file == 1) {
-  png(file = paste('output/', 'forest_exo_sec_psych.png', sep=''), width = 7, height = 6, units = 'in', res = 300)
+  png(file = paste('output/', 'forest_exo_sec_psych.png', sep=''), width = 7, height = 14, units = 'in', res = 300)
 }
 
 forest_exo_sec_psych  <- forest(pes_exo_sec_psych_summary,

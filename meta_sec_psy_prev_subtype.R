@@ -28,7 +28,6 @@ data$exo <- as.numeric(data$exo)
 (pes_exo_sec_psych_summary <- meta::metaprop(exo, tot_sample, author_year, data = data, sm = "PFT",
                                              method.tau = "DL", method.ci = "WS"))
 
-
 # Endogenous: subtypes --------------------------------------------------------------------
 
 # Autoimmune
@@ -79,10 +78,21 @@ data$seizure_freq <- as.numeric(data$seizure_freq)
 (pes_seizure_sec_psych_summary <- meta::metaprop(seizure_freq, tot_sample, author_year, data=data, sm = "PFT",
                                                  method.tau = "DL", method.ci = "WS"))
 
+# Sleep
+data$sleep_freq <- as.numeric(data$sleep_freq)
+(pes_sleep_sec_psych_summary <- meta::metaprop(sleep_freq, tot_sample, author_year, data = data, sm = "PFT",
+                                               method.tau = "DL", method.ci = "WS"))
+
+# Head injury
+data$head_freq <- as.numeric(data$head_freq)
+(pes_head_sec_psych_summary <- meta::metaprop(head_freq, tot_sample, author_year, data = data, sm = "PFT",
+                                              method.tau = "DL", method.ci = "WS"))
+
 # Endocrine
 data$endocrine_freq <- as.numeric(data$endocrine_freq)
 (pes_endocrine_sec_psych_summary <- meta::metaprop(endocrine_freq, tot_sample, author_year, data = data, sm = "PFT",
                                                    method.tau = "DL", method.ci = "WS"))
+
 
 
 # Exogenous: subtypes --------------------------------------------------------------------

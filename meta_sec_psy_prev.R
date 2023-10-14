@@ -18,7 +18,7 @@
 
 # Calculate effect sizes and sampling variance for proportion of those with any secondary cause of psychosis
 # Using Freeman-Tukey double arcsine transformed proportion (measure="PFT")
-ies_da_sec_psych <- escalc(xi = tot_sec_psych, ni = tot_sample, data = data, measure="PFT", add=0) 
+ies_da_sec_psych <- escalc(xi = tot_sec_psych, ni = tot_sample, data = data, measure = "PFT", add = 0) 
 
 # Calculate pooled effect size for overall proportion of those with secondary psychosis abnormality compared to total sample
 # Using transformed double-arcsine transformed summary effect size and random effects model using DL estimator
@@ -52,7 +52,16 @@ isqu_sec_psych <- pes_da_sec_psych$I2
 # method.tau="DL" [method is used to estimate the between-study variance= DerSimonian-Laird estimator  ]
 # method.ci="WS" [method  used to calculate confidence = wlson score ]
 
-# by cohort (FEP only: y/n) -------------------------------------------------------
+# by secondary psychosis considered (single or multiple causes) -------------------------------------------------------
+
+#  NB data_multiple = studies including 2 or more causes of secondary psychosis
+
+pes_sec_psych_summary_by_multiple <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
+                                                    method.tau = "DL", method.ci = "WS", subgroup = multiple_sec_psych_types,prediction = TRUE) 
+
+pes_sec_psych_summary_by_multiple 
+
+# by cohort (FEP only: y/n) [restricted sample]-------------------------------------------------------
 
 data_FEP <- data %>% 
   filter(FEP == "yes" | FEP == "no")
@@ -67,11 +76,24 @@ pes_sec_psych_summary_by_design <- meta::metaprop(tot_sec_psych, tot_sample, aut
                                                   method.tau = "DL", method.ci = "WS", subgroup = design) 
 pes_sec_psych_summary_by_design
 
-# by clinical setting (A&E, inPsych, outPsych, GP, mixed etc)  ----------------------------------------------------------------
+# by clinical setting (general hospital, inPsych, outPsych, GP, mixed etc)  ----------------------------------------------------------------
 
 pes_sec_psych_summary_by_setting <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
                                                    method.tau = "DL", method.ci = "WS", subgroup = setting)
 pes_sec_psych_summary_by_setting
+
+# by clinical setting binary (psychiatric verses general hospital)  ----------------------------------------------------------------
+
+pes_sec_psych_summary_by_setting_bin <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
+                                                   method.tau = "DL", method.ci = "WS", subgroup = Setting)
+pes_sec_psych_summary_by_setting_bin
+
+# by continent  (psychiatric verses general hospital)  ----------------------------------------------------------------
+
+pes_sec_psych_summary_by_continent <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data[-c(1,29),], sm = "PFT",
+                                                       method.tau = "DL", method.ci = "WS", subgroup = continent)
+pes_sec_psych_summary_by_continent 
+
 
 # by disorder (psychotic disorder or psychotic symptom)  ----------------------------------------------------------------
 
@@ -79,6 +101,12 @@ pes_sec_psych_summary_by_disorder <- meta::metaprop(tot_sec_psych, tot_sample, a
                                                     method.tau = "DL", method.ci = "WS", subgroup = disorder)
 pes_sec_psych_summary_by_disorder
 
+# # by age bins (<25,25-35,35+)  ----------------------------------------------------------------
+# comment: not working
+# 
+# pes_sec_psych_summary_by_age <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
+#                                                     method.tau = "DL", method.ci = "WS", subgroup = age_over_35)
+# pes_sec_psych_summary_by_age
 
 # # by investigation  (UDS: y/n)  ----------------------------------------------------------------
 
@@ -146,7 +174,6 @@ pes_sec_psych_summary <- meta::metaprop(tot_sec_psych, tot_sample, author_year, 
                                         method.tau = "DL", method.ci = "WS") 
 precision <- sqrt(ies_da_sec_psych$vi) 
 leave1out_sec_psych <- metainf(pes_sec_psych_summary, pooled = "random") 
-forest(leave1out_sec_psych)
 
 # Outlier and Influential Case Diagnostics
 influence_sec_psych <- influence(pes_da_sec_psych)
@@ -155,14 +182,33 @@ print(influence_sec_psych) #  asterix for influential cases -   based on 1 o 4 c
 
 #################### Optional: Rerun meta analysis excluding outliers:  manually specify outlier [commented out]
 
-# pes_fep_ab_noutlier_summary <- meta::metaprop(fep_abnormal, fep_total, author_year, data = data[-c(6),], sm = "PFT",
-#                                               method.tau = "DL", method.ci = "NAsm")
-# forest(pes_fep_ab_noutlier_summary)
+pes_fep_ab_no_outlier_summary <-meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data[-c(6),], sm = "PFT",
+                                               method.tau = "DL", method.ci = "WS", prediction = TRUE) 
 
+
+forest(pes_fep_ab_no_outlier_summary)
+
+
+
+pes_sec_psych_summary_by_multiple <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data=data, sm = "PFT",
+                                                    method.tau= "DL", method.ci = "WS", subgroup = multiple_sec_psych_types,prediction = TRUE) 
+
+pes_sec_psych_summary_by_multiple 
 
 ########## publication bias  ########## 
 
 # Egger's regression test (Regression Test for Funnel Plot Asymmetry)
 eggers_reg_sec_psych <- regtest(pes_da_sec_psych, model = "rma", predictor = "sei")
 print(eggers_reg_sec_psych)
-funnel(pes_da_sec_psych)
+
+
+########## sensitivity analysis  ########## 
+
+
+# by age under 35 ----------------------------------------------------------------
+
+pes_sec_psych_summary_restrict_under_35 <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data_under_35, sm = "PFT",
+                                                          method.tau = "DL", method.ci = "WS")
+pes_sec_psych_summary_restrict_under_35
+
+
