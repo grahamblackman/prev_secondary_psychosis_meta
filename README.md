@@ -1,6 +1,6 @@
 Analysis code and results for the study
 
-# How common are secondary cause of psychosis: A meta-analysis of prevalence 
+# Secondary causes of psychosis: A systematic review and meta-analysis 
 
 <p align="center">
 	<a href="https://en.wikipedia.org/wiki/R_(programming_language)"><img
