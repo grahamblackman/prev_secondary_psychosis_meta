@@ -1,30 +1,36 @@
 ########################################################################################
-#                                                                                      
-# meta_sec_psy_master.R from Blackman et al                                            
-#                                                                                      
-# "How common are secondary causes of psychosis?                                       
-#  A meta-analysis of prevalence"                                                      
-#                                                                                      
-# Master script
-#
-# https://github.com/grahamblackman/prev_secondary_psychosis_meta
-#
+#                                                                                      #
+# meta_sec_psy_master.R from Blackman et al                                            #
+#                                                                                      # 
+# Secondary causes of psychosis: A systematic review and meta-analysis                 # 
+#                                                                                      #
+#                                                                                      #
+# Master script                                                                        #
+#                                                                                      #
+# Code base and data: https://github.com/grahamblackman/prev_secondary_psychosis_meta  #
+#                                                                                      #
 ########################################################################################
 
-# ** to begin, you will need to set the working drive to the location of where ever you have the analysis scripts and excel data files stored. You will also need to have a subfolder entitled 'output'**
+# Prerequisites:
+#
+# * set the working directory to the directory of the scripts and datafile
+# * You will also need to have a folder in this directory entitled 'output'
 #
 # This script loads the relevant libraries, defines key functions, and executes the
 # subscripts.
 #
 # The following line will clear all objects from memory. Useful for a 'fresh start' when
 # debugging but not necessary for the script to run
-rm(list = ls()) 
+#
+# rm(list = ls()) 
 
 # The following line clears all the plots from RStudio if this script is being run inside it
 # Useful for similar 'fresh start' reasons
-dev.off(dev.list()["RStudioGD"])
+# Throws up an error if there are no plots to clear but not a problem for the script
+#
+# dev.off(dev.list()["RStudioGD"])
 
-# For the following write_to_file variable
+# For the following write_to_file variable (used by the visualistion scripts)
 #  set to 0 to display (e.g. RStudio)
 #  set to 1 to write figures to ./output/ directory (must already exist in the working directory)
 write_to_file = 1

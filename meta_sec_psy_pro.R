@@ -2,8 +2,11 @@
 #                                                                                      #
 # meta_mri_processing.R from Blackman et al                                            #
 #                                                                                      #
-# "How common are secondary causes of psychosis?                                       #
-#  A meta-analysis of prevalence"                                                      #
+# Secondary causes of psychosis: A systematic review and meta-analysis                 #
+#                                                                                      #                                                                                      
+#                                                                                      #
+#    pre-processing script                                                             #
+#                                                                                      #                                                                                      
 #                                                                                      #
 ########################################################################################
 

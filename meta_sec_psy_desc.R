@@ -2,10 +2,11 @@
 #                                                                                      #
 # meta_sec_psy_desc.R from Blackman et al                                              #
 #                                                                                      #
-# "How common are secondary cause of psychosis                                         #
-#  A meta-analysis of prevalence"                                                      #
+# Secondary causes of psychosis: A systematic review and meta-analysis                 #
+#                                                                                      #                                                                                      
 #                                                                                      #
 #   descriptive analyses                                                               #
+#                                                                                      #
 #                                                                                      #
 ########################################################################################
 

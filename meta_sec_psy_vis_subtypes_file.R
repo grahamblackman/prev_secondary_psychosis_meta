@@ -5,7 +5,9 @@
 # "How common are secondary causes of psychosis?                                       # 
 #  A meta-analysis of prevalence"                                                      #
 #                                                                                      #
-# visualizations of proportion of each subtype within a single forest plot             #                                                            #
+#                                                                                      #
+#   visualizations of proportion of each subtype within a single forest plot           #
+#                                                                                      #
 #                                                                                      #
 ########################################################################################
 
