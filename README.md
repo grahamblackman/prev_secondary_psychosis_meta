@@ -17,7 +17,7 @@ This repository contains the following files
 
 0. [psych_data.xlsx](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/psych_data.xlsx) - data extracted for meta-analysis used for this analysis
 1. [meta_sec_psy_master.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_master.R) - the master script that calls other scripts in the following order to reproduce the results reported in the manuscript
-2. [meta_sec_psy_pro.R ](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_pro.R) - pre-processing step that ensures key variables are set to the correct data types and subsets the main dataframes into dataframes that contain specific study types for later analysis
+2. [meta_sec_psy_pro.R ](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_pro.R) - pre-processing step that ensures key variables are set to the correct data types etc
 3. [meta_sec_psy_desc.R ](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_desc.R) - calculates and displays descriptive statistics
 4. [meta_sec_psy_prev.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_prev.R) - main meta-analysis of prevalence and meta-analysis with moderators
 5. [meta_sec_psy_prev_subtype.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_prev_subtype.R) - meta-analysis of specific secondary causes of psychosis
