@@ -24,7 +24,7 @@
 # The following line will clear all objects from memory. Useful for a 'fresh start' when
 # debugging but not necessary for the script to run
 #
-rm(list = ls()) 
+# rm(list = ls()) 
 
 # The following line clears all the plots from RStudio if this script is being run inside it
 # Useful for similar 'fresh start' reasons
