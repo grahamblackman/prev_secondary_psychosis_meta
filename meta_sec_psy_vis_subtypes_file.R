@@ -14,7 +14,6 @@
 
 # extract proportions from meta analysis  ---------------------------------
 
-
 extract_proportions <- function(meta_obj, name){
   # Extract proportions and other meta-analytic information from the metaprop object
   #
@@ -54,7 +53,6 @@ plot_with_forester <- function(meta_df) {
   #
   # Arguments:
   #  # meta_df: dataframe with data
-
   
   # Sort the dataframe by the largest estimate first - use arrange(desc(prop)) for reverse order
   meta_df <- meta_df %>%
@@ -86,7 +84,6 @@ plot_with_forester <- function(meta_df) {
            display = FALSE,
            file_path = here::here("output/forester_sec_subtypes.png"))
 }
-
 
 # Create empty dataframe to store results
 summary_df <- data.frame(type=character(),
@@ -151,7 +148,6 @@ summary_df[nrow(summary_df)+1,] <- extractpr
 
 extractpr <- extract_proportions(pes_head_sec_psych_summary, "Head Injury")
 summary_df[nrow(summary_df)+1,] <- extractpr
-
 
 # Change relevant columns to numeric)
 summary_df$prop <- as.numeric(summary_df$prop)

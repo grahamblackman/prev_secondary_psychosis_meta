@@ -11,6 +11,8 @@
 #                                                                                      #
 ########################################################################################
 
+# note: check "multiple" is written upper case in finalised dataset
+
 # Prerequisites:
 #
 # * set the working directory to the directory of the scripts and datafile
@@ -22,7 +24,7 @@
 # The following line will clear all objects from memory. Useful for a 'fresh start' when
 # debugging but not necessary for the script to run
 #
-# rm(list = ls()) 
+rm(list = ls()) 
 
 # The following line clears all the plots from RStudio if this script is being run inside it
 # Useful for similar 'fresh start' reasons
@@ -45,8 +47,7 @@ library("tidyverse") # multiple packages, inc ggplots2
 library("lubridate") # dealing with dates
 library("MASS") # Functions and datasets to support "Modern Applied Statistics with S
 library("janitor") # cleaning data
-library("devtools") # to download packages in development
-library("lme4") #linear model 4, required for meta analysis
+library("lme4") # linear model 4, required for meta analysis
 library("expss") #Tables, Labels and Some Useful Functions from Spreadsheets (eg excel and SPSS' Statistics)
 library("scales") # descriptions 
 library("forester") # visualised multiple meta analytic estimates onto a single forest plot   # Details here: https://github.com/rdboyes/forester
@@ -63,7 +64,7 @@ count_if <- expss::count_if
 
 # Load data
 
-datafile_path = paste("psych_data.xlsx")
+datafile_path = paste("secondary_psych_data.xlsx")
 
 data <- read_xlsx(datafile_path, sheet = "data")
 

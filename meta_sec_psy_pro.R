@@ -18,7 +18,7 @@
 ####### preparing data for analyses ######
 
 
-# # Set  multiple variables to character type
+# Set  multiple variables to character type
 subtype_char_vars <- c('author_year','setting', 
                        'continent', 'design', 'FEP','multiple_sec_psych_types', 
                        'mri_freq', 'ct_freq', 'nuclear_freq', 'eeg_freq', 
@@ -31,8 +31,8 @@ data <- data %>%
   mutate_at(subtype_char_vars, as.character)
 
 # Set all multiple variables to numeric type
-subtype_num_vars <- c('year', 'gender_male_freq','gender_female_freq', 'mean_age', 'mean_age_sec', 'ethnicity_black', 'ethnicity_white','ethnicity_asian','ethnicity_other',   
-                      'DUP','DUP_pri','DUP_sec','tot_sample', 'tot_sec_psych',  
+subtype_num_vars <- c('year', 'gender_male_freq','gender_female_freq', 'mean_age', 'mean_age_sec',   
+                      'tot_sample', 'tot_sec_psych',  
                       'auto_freq', 'congen_freq', 'toxic_freq', 'iatrogenic_freq', 'cerebrovas_freq', 'space_oc_freq', 'metabolic_freq', 'dietary_freq', 'infec_freq', 'degen_freq', 'demye_freq', 'seizure_freq', 'sleep_freq','head_freq','endocrine_freq', 'other_sub_freq', 'unknown_sub_freq', 
                       'tot_rob_score')
 
@@ -54,10 +54,13 @@ data$setting <- recode_factor(data$setting, "inpat_psych" = 'Psychiatric Hospita
 
 # subsets of studies ------------------------------------------------------
 
+# Create dataframe  that includes only studies reporting FEP AND who had a psychotic disorder ...
+data_FEP_psychosis_disorder_only <- data %>% 
+  filter(FEP == "yes" & disorder == "yes" )  
 
-# Create dataframe that includes only studies reporting FEP...
-data_fep <- data %>%
-  subset(FEP == "yes")
+# Create dataframe  that includes only studies who asssesed for multiple secondary causes...
+data_multiple_causes_only <- data %>% 
+  filter(multiple_sec_psych_types== "multiple")  
 
 # Create dataframe based on clinical setting...
 
@@ -78,13 +81,10 @@ data_mixture <- data %>%
   subset(setting == "mixture")
 
 
-
 # create indicator for age ------------------------------------------------
-
 
 data <- data %>%
   mutate(age_over_35= ifelse(mean_age > 35, "0", "1"))
-
 
 subtype_char_vars <- c('age_over_35')
 
@@ -92,10 +92,7 @@ data <- data %>%
   mutate_at(subtype_char_vars, as.character)
 
 
-
-
 # create age bins (<24, 25-35, 35+) ----------------------------------------------
-
 
 data <- data %>%
   mutate(age_bins= 
@@ -143,6 +140,9 @@ data <- data %>%
 data <- data %>%
   mutate(csf_all = ifelse(data$csf_freq == "all", "1", "0"))
 
+# EEG
+data <- data %>%
+  mutate(eeg_all = ifelse(data$eeg_freq == "all", "1", "0"))
 
 # UDS + Bloods  
 data <- data %>%
@@ -163,9 +163,7 @@ data <- data %>%
   mutate(urine_blood_mri_all = ifelse(data$urine_freq == "all" & data$blood_freq == "all" & data$mri_freq == "all", "1", "0"))
 
 
-
-
-# create indicator for absence investigations (1 = not done in any patients, or not reported)------------------------------------------------
+# create indicator for absence of investigations (1 = not done in any patients, or not reported)------------------------------------------------
 
 # Urine analysis
 data <- data %>%
@@ -179,20 +177,19 @@ data <- data %>%
 data <- data %>%
   mutate(mri_none = ifelse(data$mri_freq == "NS", "1", "0"))
 
-# UDS + Bloods  [n=5]
+# UDS + Bloods 
 data <- data %>%
   mutate(urine_blood_none = ifelse(data$urine_freq == "NS" & data$blood_freq == "NS", "1", "0"))
 
-# UDS + MRI [n=2]
+# UDS + MRI 
 data <- data %>%
   mutate(urine_mri_none = ifelse(data$urine_freq == "NS" & data$mri_freq == "NS", "1", "0"))
 
-# Bloods + MRI [n=2]
+# Bloods + MRI
 data <- data %>%
   mutate(blood_mri_none = ifelse(data$blood_freq == "NS" & data$mri_freq=="NS", "1", "0"))
 
 # UDS + Bloods + MRI
 data <- data %>%
   mutate(urine_blood_mri_none = ifelse(data$urine_freq == "NS" & data$blood_freq == "NS" & data$mri_freq == "NS", "1", "0"))
-
 

@@ -6,13 +6,15 @@
 #  A meta-analysis of prevalence"                                                      #
 #                                                                                      #
 #                                                                                      #
-#   visualizations of proportion of each sen within a single forest plot               #
+# visualizations of proportion of secondary psychosis according to investigation       #
 #                                                                                      #
 #                                                                                      #
 ########################################################################################
 
-
-# Uses the extract_proportions function from meta_sec_psy_vis_subtypes_file.R 
+#
+# This script plots forest plot of the the estimated proportion for all causes of secondary psychosis
+# restricted to studies that performed MRI, blood, CSF, EEG and urine analysis on all patients
+#
 
 # plot with forester ------------------------------------------------------
 
@@ -56,7 +58,6 @@ plot_with_forester_investigation <- function(meta_df) {
            file_path = here::here("output/forester_sec_investigations.png"))
 }
 
-
 # Create empty dataframe to store results
 investigation_summary_df <- data.frame(type=character(),
                                        total_cases = numeric(),
@@ -70,10 +71,6 @@ investigation_summary_df <- data.frame(type=character(),
 # Extract raw proportions from meta-analytic objects using the extract_proportions function
 # and add each one to the bottom of the summary_df dataframe
 
-# example
-# extractpr <- extract_proportions(pes_auto_sec_psych_summary, "Autoimmune")
-# summary_df[nrow(summary_df)+1,] <- extractpr
-
 extractpr_invest <- extract_proportions(pes_sec_psych_summary_by_urine_all, "Urine")
 investigation_summary_df[nrow(investigation_summary_df)+1,] <- extractpr_invest 
 
@@ -86,15 +83,8 @@ investigation_summary_df[nrow(investigation_summary_df)+1,] <- extractpr_invest
 extractpr_invest <- extract_proportions(pes_sec_psych_summary_by_csf_all, "CSF")
 investigation_summary_df[nrow(investigation_summary_df)+1,] <- extractpr_invest 
 
-# extractpr_invest <- extract_proportions(pes_sec_psych_summary_by_urine_mri_all, "Urine & MRI")
-# investigation_summary_df[nrow(investigation_summary_df)+1,] <- extractpr_invest 
-# 
-# extractpr_invest <- extract_proportions(pes_sec_psych_summary_by_blood_mri_all, "Blood & MRI")
-# investigation_summary_df[nrow(investigation_summary_df)+1,] <- extractpr_invest 
-# 
-# extractpr_invest <- extract_proportions(pes_sec_psych_summary_by_urine_blood_mri_all, "Urine & Blood & MRI")
-# investigation_summary_df[nrow(investigation_summary_df)+1,] <- extractpr_invest 
-
+extractpr_invest <- extract_proportions(pes_sec_psych_summary_by_eeg_all, "EEG")
+investigation_summary_df[nrow(investigation_summary_df)+1,] <- extractpr_invest 
 
 # Change relevant columns to numeric)
 investigation_summary_df$prop <- as.numeric(investigation_summary_df$prop)

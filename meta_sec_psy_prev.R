@@ -4,14 +4,13 @@
 #                                                                                      #
 # Secondary causes of psychosis: A systematic review and meta-analysis                 #
 #                                                                                      #                                                                                      
-#                                                                                      #                                                                                      #
+#                                                                                      #                                                                                      
 #     meta analysis and sub group analysis                                             #
 #                                                                                      #
 #                                                                                      #
 ########################################################################################
 
-
-###################  meta analysis of proportion [using metafor]
+###################  meta analysis of proportion [metafor package]
 
 # Calculate effect sizes and sampling variance for proportion of those with any secondary cause of psychosis
 # Using Freeman-Tukey double arcsine transformed proportion (measure="PFT")
@@ -22,9 +21,9 @@ ies_da_sec_psych <- escalc(xi = tot_sec_psych, ni = tot_sample, data = data, mea
 pes_da_sec_psych <- rma(yi, vi, data = ies_da_sec_psych, method = "DL", level = 95) 
 
 # Convert to non-transformed measurement scale (i.e., proportion) and yield a true summary proportion
-pes_sec_psych <- stats::predict(pes_da_sec_psych, transf = transf.ipft.hm, targ=list(ni = data$tot_sample)) #class: list.rma
+pes_sec_psych <- stats::predict(pes_da_sec_psych, transf = transf.ipft.hm, targ=list(ni = data$tot_sample)) 
 summary(pes_sec_psych)
-print(pes_sec_psych, digits=2)
+print(pes_sec_psych, digits = 2)
 prop_sec_psych <- pes_sec_psych$pred
 per_sec_psych <- label_percent()(prop_sec_psych)
 sprintf("Meta analytic estimate of proportion of secondary psychosis among all cases of psychosis: %s", per_sec_psych)
@@ -35,35 +34,39 @@ per_LCI_sec_psych <- label_percent()(pes_sec_psych$ci.lb)
 per_UCI_sec_psych <- label_percent()(pes_sec_psych$ci.ub)
 
 # Calculate 'number needed to scan'
-nns_sec_psych <- (ceiling(1/pes_sec_psych$pred)) 
+nns_sec_psych <- (ceiling(1 / pes_sec_psych$pred)) 
+
 # Number needed to scan upper and lower estimate
-nns_LCI_sec_psych <- (ceiling(1/pes_sec_psych$ci.ub)) 
-nns_UCI_sec_psych <- (ceiling(1/pes_sec_psych$ci.lb))
+nns_LCI_sec_psych <- (ceiling(1 / pes_sec_psych$ci.ub)) 
+nns_UCI_sec_psych <- (ceiling(1 / pes_sec_psych$ci.lb))
 # NB based on transformed data
 isqu_sec_psych <- pes_da_sec_psych$I2 
 
-###################  Subgroup analysis [using metaprop]
+
+# by secondary psychosis considered (using meta package) -------------------------------------------------------
+
+pes_sec_psych_summary <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
+                                        method.tau = "DL", method.ci = "WS", prediction = TRUE) 
+
+pes_sec_psych_summary
+
+###################  Subgroup analysis [meta package ]
 
 # Arguments
-# sm="PFT",  [summary measure = Freeman-Tukey Double arcsine transformation]
-# method.tau="DL" [method is used to estimate the between-study variance= DerSimonian-Laird estimator  ]
-# method.ci="WS" [method  used to calculate confidence = wlson score ]
+# summary measure = (PFT) Freeman-Tukey Double arcsine transformation]
+# method to estimate the between-study variance= DerSimonian-Laird estimator  ]
+# method  to calculate confidence = wilson score ]
 
 # by secondary psychosis considered (single or multiple causes) -------------------------------------------------------
 
-#  NB data_multiple = studies including 2 or more causes of secondary psychosis
-
 pes_sec_psych_summary_by_multiple <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
-                                                    method.tau = "DL", method.ci = "WS", subgroup = multiple_sec_psych_types,prediction = TRUE) 
+                                                    method.tau = "DL", method.ci = "WS", subgroup = multiple_sec_psych_types, prediction = TRUE) 
 
 pes_sec_psych_summary_by_multiple 
 
-# by cohort (FEP only: y/n) [restricted sample]-------------------------------------------------------
+# by cohort  (FEP only: y/n)-------------------------------------------------------
 
-data_FEP <- data %>% 
-  filter(FEP == "yes" | FEP == "no")
-
-pes_sec_psych_summary_by_FEP <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data_FEP, sm = "PFT",
+pes_sec_psych_summary_by_FEP <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
                                                method.tau = "DL", method.ci = "WS", subgroup = FEP) 
 pes_sec_psych_summary_by_FEP
 
@@ -73,19 +76,19 @@ pes_sec_psych_summary_by_design <- meta::metaprop(tot_sec_psych, tot_sample, aut
                                                   method.tau = "DL", method.ci = "WS", subgroup = design) 
 pes_sec_psych_summary_by_design
 
-# by clinical setting (general hospital, inPsych, outPsych, GP, mixed etc)  ----------------------------------------------------------------
+# by clinical setting (general hospital, inPsych, outPsych, mixed etc)  ----------------------------------------------------------------
 
 pes_sec_psych_summary_by_setting <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
                                                    method.tau = "DL", method.ci = "WS", subgroup = setting)
 pes_sec_psych_summary_by_setting
 
-# by clinical setting binary (psychiatric verses general hospital)  ----------------------------------------------------------------
+# by clinical setting  (psychiatric verses general hospital)  ----------------------------------------------------------------
 
 pes_sec_psych_summary_by_setting_bin <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
                                                    method.tau = "DL", method.ci = "WS", subgroup = Setting)
 pes_sec_psych_summary_by_setting_bin
 
-# by continent  (psychiatric verses general hospital)  ----------------------------------------------------------------
+# by continent  ----------------------------------------------------------------
 
 pes_sec_psych_summary_by_continent <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data[-c(1,29),], sm = "PFT",
                                                        method.tau = "DL", method.ci = "WS", subgroup = continent)
@@ -98,12 +101,16 @@ pes_sec_psych_summary_by_disorder <- meta::metaprop(tot_sec_psych, tot_sample, a
                                                     method.tau = "DL", method.ci = "WS", subgroup = disorder)
 pes_sec_psych_summary_by_disorder
 
-# # by age bins (<25,25-35,35+)  ----------------------------------------------------------------
-# comment: not working
-# 
-# pes_sec_psych_summary_by_age <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
-#                                                     method.tau = "DL", method.ci = "WS", subgroup = age_over_35)
-# pes_sec_psych_summary_by_age
+# # # by age bins (<25,25-35,35+)  ----------------------------------------------------------------
+
+# #  studies without age reported (NAs) removed
+
+data_age_bins <- data %>%
+  filter(!is.na(age_bins))
+
+pes_sec_psych_summary_by_age <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data_age_bins, sm = "PFT",
+                                               method.tau = "DL", method.ci = "WS", subgroup = age_bins)
+pes_sec_psych_summary_by_age
 
 # # by investigation  (UDS: y/n)  ----------------------------------------------------------------
 
@@ -135,7 +142,7 @@ pes_sec_psych_summary_by_physical_exam <- meta::metaprop(tot_sec_psych, tot_samp
                                                          method.tau = "DL", method.ci = "WS", subgroup = physical_exam_freq)
 pes_sec_psych_summary_by_physical_exam 
 
-###################  # meta regression [based on metafor package]---------------------------------------------------------
+###################  # meta regression [metafor package]---------------------------------------------------------
 
 # publication year --------------------------------------------------------------------
 
@@ -151,25 +158,25 @@ print(pes_sec_psych_summary_metareg_age)
 sec_psych_metareg_pval_age <- pes_sec_psych_summary_metareg_age$pval[2]
 sec_psych_metareg_pval_age
 
-###################  outlier study detection [using studentized residuals]
+# sample size ----------------------------------------------------------------
 
-# # identify studentized residuals larger than 2 (or 3 if enough studies) 
-# # R comment: 'rstudent' function requires object of class "rma". multi-array average (RMA)
-# 
-# stud.res <- rstudent(pes_da_fep_ab) # calc Residual Values (only works on DA transformation - need to convert back?)
-# abs.z <- abs(stud.res$z) # standardized residuals (externally standardized for rstudent).
-# stud.res[order(-abs.z)] # ordered
+pes_sec_psych_summary_metareg_size <- rma(yi, vi, data = ies_da_sec_psych, mods = ~tot_sample, method = "DL")
+print(pes_sec_psych_summary_metareg_size)
+sec_psych_metareg_pval_size <- pes_sec_psych_summary_metareg_size$pval[2]
+sec_psych_metareg_pval_size
 
-###################  influential amd outlier detection 
+###################  influential and outlier detection 
 
 # resources:
 #  Viechtbauer, Wolfgang, and Mike W-L Cheung. 2010. “Outlier and Influence Diagnostics for Meta-Analysis.” Research Synthesis Methods 1 (2). Wiley Online Library: 112–25.
 #  Baujat, Bertrand, Cédric Mahé, Jean-Pierre Pignon, and Catherine Hill. 2002. “A Graphical Method for Exploring Heterogeneity in Meta-Analyses: Application to a Meta-Analysis of 65 Trials.” Statistics in Medicine 21 (18). Wiley Online Library: 2641–52.
 
-# Leave one out (L1O) sensitivity analysis 
+# pooled effect
 pes_sec_psych_summary <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
                                         method.tau = "DL", method.ci = "WS") 
 precision <- sqrt(ies_da_sec_psych$vi) 
+
+# Leave one out (L1O) sensitivity analysis
 leave1out_sec_psych <- metainf(pes_sec_psych_summary, pooled = "random") 
 
 # Outlier and Influential Case Diagnostics
@@ -177,20 +184,10 @@ influence_sec_psych <- influence(pes_da_sec_psych)
 print(influence_sec_psych) #  asterix for influential cases -   based on 1 o 4 criteria (see help page for details)
 
 
-#################### Optional: Rerun meta analysis excluding outliers:  manually specify outlier [commented out]
+#################### Rerun meta analysis excluding outliers [ Etlouba et al 2018]
 
-pes_fep_ab_no_outlier_summary <-meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data[-c(6),], sm = "PFT",
+pes_fep_ab_no_outlier_summary <-meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data[-c(7),], sm = "PFT",
                                                method.tau = "DL", method.ci = "WS", prediction = TRUE) 
-
-
-forest(pes_fep_ab_no_outlier_summary)
-
-
-
-pes_sec_psych_summary_by_multiple <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data=data, sm = "PFT",
-                                                    method.tau= "DL", method.ci = "WS", subgroup = multiple_sec_psych_types,prediction = TRUE) 
-
-pes_sec_psych_summary_by_multiple 
 
 ########## publication bias  ########## 
 
@@ -202,10 +199,28 @@ print(eggers_reg_sec_psych)
 ########## sensitivity analysis  ########## 
 
 
-# by age under 35 ----------------------------------------------------------------
+#  age under 35 ----------------------------------------------------------------
 
 pes_sec_psych_summary_restrict_under_35 <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data_under_35, sm = "PFT",
                                                           method.tau = "DL", method.ci = "WS")
 pes_sec_psych_summary_restrict_under_35
+
+
+#  multiple causes assessed----------------------------------------------------------------
+
+pes_sec_psych_summary_multiple <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data_multiple_causes_only, sm = "PFT",
+                                                    method.tau = "DL", method.ci = "WS",prediction = TRUE) 
+
+pes_sec_psych_summary_multiple
+
+
+# FEP + psychosis disorder   ----------------------------------------------------------------
+
+
+pes_sec_psych_summary_by_FEP_psychosis_disorder<- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data_FEP_psychosis_disorder_only, sm = "PFT",
+                                                    method.tau = "DL", method.ci = "WS", prediction = TRUE) 
+
+pes_sec_psych_summary_by_FEP_psychosis_disorder
+
 
 

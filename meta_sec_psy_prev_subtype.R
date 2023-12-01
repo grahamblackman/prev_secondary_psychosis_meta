@@ -13,11 +13,8 @@
 #
 # This script calculates the meta analysis of proportions of secondary psychosis subtypes...
 #
-# Note:  metaprop and rma functions are used for running meta analysis (rma is needed for moderator and leave one out
-#       sensitivity analyses) 
-#       
 
-# endogenous vs exogenous --------------------------------------------------------------------
+# endogenous and exogenous subtypes --------------------------------------------------------------------
 
 
 # Endogenous 
