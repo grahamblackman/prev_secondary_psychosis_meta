@@ -21,7 +21,7 @@ This repository contains the following files
 3. [meta_sec_psy_desc.R ](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_desc.R) - calculates and displays descriptive statistics
 4. [meta_sec_psy_prev.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_prev.R) - main meta-analysis of prevalence and meta-analysis with moderators
 5. [meta_sec_psy_prev_subtype.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_prev_subtype.R) - meta-analysis of specific secondary causes of psychosis
-6. [meta_sec_psy_prev_investigation.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_prev_investigation.R) - meta-analysis by investigation type
+6. [meta_sec_psy_vis_investigations_file.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_vis_investigations_file.R) - meta-analysis by investigation type
 7. [meta_sec_psy_vis_file.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_vis_file.R) - produces primary visualisations of prevalence
 8. [meta_sec_psy_vis_subtypes_file.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_vis_subtypes_file.R) - visualisations of proportion of each subtype within a single forest plot
 9. [meta_sec_psy_vis_investigations_file.R](https://github.com/grahamblackman/prev_secondary_psychosis_meta/blob/main/meta_sec_psy_vis_investigations_file.R) - visualisations of proportion of secondary psychosis by investigation type within a single forest plot
