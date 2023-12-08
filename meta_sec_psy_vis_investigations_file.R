@@ -1,6 +1,6 @@
 ########################################################################################
 #                                                                                      #
-# meta_mri_visualization_to_file.R from Blackman et al                                 #
+# meta_sec_psy_vis_investigations_file.R from Blackman et al                                 #
 #                                                                                      #
 # "How common are secondary causes of psychosis?                                       # 
 #  A meta-analysis of prevalence"                                                      #

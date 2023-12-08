@@ -76,7 +76,7 @@ pes_sec_psych_summary_by_design <- meta::metaprop(tot_sec_psych, tot_sample, aut
                                                   method.tau = "DL", method.ci = "WS", subgroup = design) 
 pes_sec_psych_summary_by_design
 
-# by clinical setting (general hospital, inPsych, outPsych, mixed etc)  ----------------------------------------------------------------
+# by clinical setting (general hospital, inPsych, outPsych, mixed)  ----------------------------------------------------------------
 
 pes_sec_psych_summary_by_setting <- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data, sm = "PFT",
                                                    method.tau = "DL", method.ci = "WS", subgroup = setting)
@@ -184,7 +184,7 @@ influence_sec_psych <- influence(pes_da_sec_psych)
 print(influence_sec_psych) #  asterix for influential cases -   based on 1 o 4 criteria (see help page for details)
 
 
-#################### Rerun meta analysis excluding outliers [ Etlouba et al 2018]
+#################### Rerun meta analysis excluding outlier study [Etlouba et al 2018]
 
 pes_fep_ab_no_outlier_summary <-meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data[-c(7),], sm = "PFT",
                                                method.tau = "DL", method.ci = "WS", prediction = TRUE) 
@@ -214,7 +214,7 @@ pes_sec_psych_summary_multiple <- meta::metaprop(tot_sec_psych, tot_sample, auth
 pes_sec_psych_summary_multiple
 
 
-# FEP + psychosis disorder   ----------------------------------------------------------------
+# First episode psychotic disorder   ----------------------------------------------------------------
 
 
 pes_sec_psych_summary_by_FEP_psychosis_disorder<- meta::metaprop(tot_sec_psych, tot_sample, author_year, data = data_FEP_psychosis_disorder_only, sm = "PFT",

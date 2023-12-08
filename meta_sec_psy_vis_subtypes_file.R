@@ -2,9 +2,7 @@
 #                                                                                      #
 # meta_mri_visualization_to_file.R from Blackman et al                                 #
 #                                                                                      #
-# "How common are secondary causes of psychosis?                                       # 
-#  A meta-analysis of prevalence"                                                      #
-#                                                                                      #
+#   Secondary causes of psychosis: A systematic review and meta-analysis               #                                                                                       #
 #                                                                                      #
 #   visualizations of proportion of each subtype within a single forest plot           #
 #                                                                                      #
@@ -147,6 +145,9 @@ extractpr <- extract_proportions(pes_sleep_sec_psych_summary, "Sleep")
 summary_df[nrow(summary_df)+1,] <- extractpr
 
 extractpr <- extract_proportions(pes_head_sec_psych_summary, "Head Injury")
+summary_df[nrow(summary_df)+1,] <- extractpr
+
+extractpr <- extract_proportions(pes_endo_sec_psych_summary, "Any Underlying Medical")
 summary_df[nrow(summary_df)+1,] <- extractpr
 
 # Change relevant columns to numeric)

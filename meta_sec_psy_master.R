@@ -11,7 +11,8 @@
 #                                                                                      #
 ########################################################################################
 
-# note: check "multiple" is written upper case in finalised dataset
+
+# **********to intergrate comments vb
 
 # Prerequisites:
 #
@@ -50,8 +51,7 @@ library("janitor") # cleaning data
 library("lme4") # linear model 4, required for meta analysis
 library("expss") #Tables, Labels and Some Useful Functions from Spreadsheets (eg excel and SPSS' Statistics)
 library("scales") # descriptions 
-library("forester") # visualised multiple meta analytic estimates onto a single forest plot   # Details here: https://github.com/rdboyes/forester
-
+library("forester") # visualised multiple meta analytic estimates onto a single forest plot  
 
 # Ensure names map to explicit package functions and are not overwritten
 

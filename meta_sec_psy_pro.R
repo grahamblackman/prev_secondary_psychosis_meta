@@ -46,7 +46,6 @@ data <- data %>%
 
 # rename factor levels ----------------------------------------------------
 
-
 data$setting <- recode_factor(data$setting, "inpat_psych" = 'Psychiatric Hospital',
                                             "outpat_psych" = 'Psychiatric Clinic',
                                             "gen_hospital" = 'General Hospital',
@@ -54,11 +53,11 @@ data$setting <- recode_factor(data$setting, "inpat_psych" = 'Psychiatric Hospita
 
 # subsets of studies ------------------------------------------------------
 
-# Create dataframe  that includes only studies reporting FEP AND who had a psychotic disorder ...
+# Create dataframe that includes only studies reporting FEP AND who had a psychotic disorder ...
 data_FEP_psychosis_disorder_only <- data %>% 
   filter(FEP == "yes" & disorder == "yes" )  
 
-# Create dataframe  that includes only studies who asssesed for multiple secondary causes...
+# Create dataframe that includes only studies who asssesed for multiple secondary causes...
 data_multiple_causes_only <- data %>% 
   filter(multiple_sec_psych_types== "multiple")  
 
@@ -100,19 +99,10 @@ data <- data %>%
                   ifelse(mean_age > 25, "25_35",
                          "under_25")))
 
-# filter by age
-data_under_25 <- data %>% 
-  subset(age_bins == "under_25")
-
-data_25_35 <- data %>% 
-  subset(age_bins == "25_35")
-
-data_over_35 <- data %>% 
-  subset(age_bins == "over_35")
+# create dataframe that includes only studies with average age under 35 years ----------------------------------------------
 
 data_under_35 <- data %>% 
   subset(age_bins != "over_35")
-
 
 # create binary variable for psychiatric setting (psychiatric/general)------------------------------------------------
 
@@ -143,53 +133,4 @@ data <- data %>%
 # EEG
 data <- data %>%
   mutate(eeg_all = ifelse(data$eeg_freq == "all", "1", "0"))
-
-# UDS + Bloods  
-data <- data %>%
-  mutate(urine_blood_all = ifelse(data$urine_freq == "all" & data$blood_freq == "all", "1", "0"))
-
-
-# UDS + MRI 
-data <- data %>%
-  mutate(urine_mri_all = ifelse(data$urine_freq == "all" & data$mri_freq == "all", "1", "0"))
-
-# Bloods + MRI 
-data <- data %>%
-  mutate(blood_mri_all = ifelse(data$blood_freq == "all" & data$mri_freq=="all", "1", "0"))
-
-
-# UDS+ Bloods + MRI
-data <- data %>%
-  mutate(urine_blood_mri_all = ifelse(data$urine_freq == "all" & data$blood_freq == "all" & data$mri_freq == "all", "1", "0"))
-
-
-# create indicator for absence of investigations (1 = not done in any patients, or not reported)------------------------------------------------
-
-# Urine analysis
-data <- data %>%
-  mutate(urine_none = ifelse(data$urine_freq == "NS", "1", "0"))
-
-# Bloods 
-data <- data %>%
-  mutate(blood_none = ifelse(data$blood_freq == "NS", "1", "0"))
-
-# MRI
-data <- data %>%
-  mutate(mri_none = ifelse(data$mri_freq == "NS", "1", "0"))
-
-# UDS + Bloods 
-data <- data %>%
-  mutate(urine_blood_none = ifelse(data$urine_freq == "NS" & data$blood_freq == "NS", "1", "0"))
-
-# UDS + MRI 
-data <- data %>%
-  mutate(urine_mri_none = ifelse(data$urine_freq == "NS" & data$mri_freq == "NS", "1", "0"))
-
-# Bloods + MRI
-data <- data %>%
-  mutate(blood_mri_none = ifelse(data$blood_freq == "NS" & data$mri_freq=="NS", "1", "0"))
-
-# UDS + Bloods + MRI
-data <- data %>%
-  mutate(urine_blood_mri_none = ifelse(data$urine_freq == "NS" & data$blood_freq == "NS" & data$mri_freq == "NS", "1", "0"))
 

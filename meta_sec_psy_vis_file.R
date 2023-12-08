@@ -2,9 +2,7 @@
 #                                                                                      #
 # meta_mri_visualization_to_file.R from Blackman et al                                 #
 #                                                                                      #
-# "How common are secondary causes of psychosis?                                       # 
-#  A meta-analysis of prevalence"                                                      #
-#                                                                                      #
+# Secondary causes of psychosis: A systematic review and meta-analysis                 # 
 #                                                                                      #
 #   primary visualizations                                                             #
 #                                                                                      #

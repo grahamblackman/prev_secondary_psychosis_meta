@@ -17,7 +17,7 @@
 # endogenous and exogenous subtypes --------------------------------------------------------------------
 
 
-# Endogenous 
+# Endogenous  (i.e any underlying medical cause)
 data$endo <- as.numeric(data$endo)
 (pes_endo_sec_psych_summary <- meta::metaprop(endo, tot_sample, author_year, data = data, sm = "PFT",
                                               method.tau = "DL", method.ci = "WS"))
@@ -90,7 +90,6 @@ data$head_freq <- as.numeric(data$head_freq)
 data$endocrine_freq <- as.numeric(data$endocrine_freq)
 (pes_endocrine_sec_psych_summary <- meta::metaprop(endocrine_freq, tot_sample, author_year, data = data, sm = "PFT",
                                                    method.tau = "DL", method.ci = "WS"))
-
 
 
 # Exogenous: subtypes --------------------------------------------------------------------
