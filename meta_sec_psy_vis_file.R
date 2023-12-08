@@ -14,7 +14,6 @@
 # related analyses to the output directory specified below
 #
 
-
 # Global options ----------------------------------------------------------
 
 options(na.action = "na.omit")

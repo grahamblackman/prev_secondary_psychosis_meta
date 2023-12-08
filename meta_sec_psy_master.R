@@ -12,8 +12,6 @@
 ########################################################################################
 
 
-# **********to intergrate comments vb
-
 # Prerequisites:
 #
 # * set the working directory to the directory of the scripts and datafile
